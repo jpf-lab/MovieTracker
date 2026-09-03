@@ -1,5 +1,6 @@
 package org.example.backend.service;
 
+import org.example.backend.dto.SavedItemDTO;
 import org.example.backend.model.SavedItem;
 import org.example.backend.repository.SavedItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,19 +31,24 @@ class SavedItemServiceTest {
     }
 
     @Test
-    void save_shouldCallRepositorySave() {
-        // Given: ein Beispiel-Item und die Erwartung, was das
-        // (gemockte) Repository beim Speichern zurueckgibt
-        SavedItem item = new SavedItem("1", "123", "movie", "Test Movie", "/poster.jpg");
-        when(savedItemRepository.save(item)).thenReturn(item);
+    void save_shouldBuildEntityFromDtoAndCallRepositorySave() {
+        // Given: ein DTO (ohne id, so wie es vom Frontend kommt)
+        // und die Entity, die das Repository beim Speichern
+        // zurueckgeben soll (mit generierter id)
+        SavedItemDTO dto = new SavedItemDTO("123", "movie", "Test Movie", "/poster.jpg");
+        SavedItem expectedEntityToSave = new SavedItem(null, "123", "movie", "Test Movie", "/poster.jpg");
+        SavedItem savedEntity = new SavedItem("1", "123", "movie", "Test Movie", "/poster.jpg");
 
-        // When: die zu testende Methode wird aufgerufen
-        SavedItem result = savedItemService.save(item);
+        when(savedItemRepository.save(expectedEntityToSave)).thenReturn(savedEntity);
 
-        // Then: pruefen, dass das Ergebnis stimmt UND dass das
-        // Repository tatsaechlich mit dem richtigen Item aufgerufen wurde
-        assertEquals(item, result);
-        verify(savedItemRepository).save(item);
+        // When: der Service wird mit dem DTO aufgerufen
+        SavedItem result = savedItemService.save(dto);
+
+        // Then: das Ergebnis ist die vom Repository zurueckgegebene
+        // Entity (mit id), und das Repository wurde mit der korrekt
+        // aus dem DTO aufgebauten Entity (ohne id) aufgerufen
+        assertEquals(savedEntity, result);
+        verify(savedItemRepository).save(expectedEntityToSave);
     }
 
     @Test
@@ -79,8 +85,7 @@ class SavedItemServiceTest {
         savedItemService.deleteByExternalIdAndMediaType("123", "movie");
 
         // Then: pruefen, dass das Repository mit den richtigen
-        // Parametern aufgerufen wurde (da es nichts zurueckgibt,
-        // ist verify() hier die einzige Moeglichkeit zu testen)
+        // Parametern aufgerufen wurde
         verify(savedItemRepository).deleteByExternalIdAndMediaType("123", "movie");
     }
 }

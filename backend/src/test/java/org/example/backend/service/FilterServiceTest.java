@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDto;
+import org.example.backend.dto.MovieDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,11 +30,11 @@ class FilterServiceTest {
     void filter_shouldReturnResultsFromProvider() {
         // Given: der (gemockte) Provider liefert eine feste Liste
         // zurueck, wenn genau diese Filterparameter reinkommen
-        MovieDto movie = new MovieDto("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
         when(movieProvider.search("Fight", "movie", 1999)).thenReturn(List.of(movie));
 
         // When: der Service wird mit denselben Parametern aufgerufen
-        List<MovieDto> result = filterService.filter("Fight", "movie", 1999);
+        List<MovieDTO> result = filterService.filter("Fight", "movie", 1999);
 
         // Then: das Ergebnis entspricht genau dem, was der Provider
         // zurueckgegeben hat - der Service reicht nur durch

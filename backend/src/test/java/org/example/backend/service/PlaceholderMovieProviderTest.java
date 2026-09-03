@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDto;
+import org.example.backend.dto.MovieDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +15,7 @@ class PlaceholderMovieProviderTest {
         PlaceholderMovieProvider provider = new PlaceholderMovieProvider();
 
         // When
-        List<MovieDto> result = provider.search("egal", "egal", 2000);
+        List<MovieDTO> result = provider.search("egal", "egal", 2000);
 
         // Then: nur pruefen, dass ueberhaupt Platzhalterdaten
         // zurueckkommen - mehr gibt es hier nicht zu testen,

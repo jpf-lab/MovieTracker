@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.SavedItemDTO;
 import org.example.backend.model.SavedItem;
 import org.example.backend.service.SavedItemService;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,9 @@ public class SavedItemController {
     private final SavedItemService savedItemService;
 
     @PostMapping
-    public SavedItem save(@RequestBody SavedItem item) {
-        return savedItemService.save(item);
+    public SavedItem save(@RequestBody SavedItemDTO savedItemDTO) {
+
+        return savedItemService.save(savedItemDTO);
     }
 
     @GetMapping
