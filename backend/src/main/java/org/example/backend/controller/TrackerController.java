@@ -29,6 +29,12 @@ public class TrackerController {
         }
     }
 
+    private String getPosterPath(TmdbConfiguration configuration, String posterPath){
+        return configuration.images().secure_base_url()
+                + getPosterWidth(configuration.images().poster_sizes())
+                + posterPath;
+    }
+
     @GetMapping("/search")
     public TmdbResults findByQuery(@RequestParam String query) {
         TmdbResults results = tmdbService.findByQuery(query, 1);
@@ -39,9 +45,7 @@ public class TrackerController {
                 .map(r -> new TmdbResult(
                         r.id(),
                         r.media_type(),
-                        configuration.images().secure_base_url()
-                                + getPosterWidth(configuration.images().poster_sizes())
-                                + r.poster_path(),
+                        getPosterPath(configuration, r.poster_path()),
                         r.overview(),
                         r.release_date(),
 
