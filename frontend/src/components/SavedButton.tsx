@@ -7,7 +7,7 @@ type SavedButtonProps = {
     item: Omit<SavedItem, "id">;
 };
 
-function SavedButton(props: SavedButtonProps) {
+function SavedButton(props: Readonly<SavedButtonProps>) {
     const [isSaved, setIsSaved] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
