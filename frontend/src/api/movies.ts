@@ -10,3 +10,7 @@ export type MovieFilters = {
 export const getFilteredMovies = (filters: MovieFilters) => {
     return axios.get<Movie[]>("/api/movies/filter", { params: filters });
 };
+
+export const getRandomMovie = () => {
+    return axios.get<Movie>("/api/movies/random");
+};
