@@ -19,7 +19,7 @@ function SavedButton(props: SavedButtonProps) {
                 .then(() => setIsSaved(false))
                 .finally(() => setIsLoading(false));
         } else {
-            saveItem(props.item as SavedItem)
+            saveItem(props.item)
                 .then(() => setIsSaved(true))
                 .finally(() => setIsLoading(false));
         }
