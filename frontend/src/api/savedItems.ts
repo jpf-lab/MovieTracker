@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { SavedItem } from "../types/SavedItem";
 
-const BASE_URL = "/api/saved";
+const BASE_URL = import.meta.env.VITE_BACKEND_API + "/api/saved";
 
 export const saveItem = (item: SavedItem) => {
     return axios.post<SavedItem>(BASE_URL, item);

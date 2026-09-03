@@ -8,9 +8,9 @@ export type MovieFilters = {
 };
 
 export const getFilteredMovies = (filters: MovieFilters) => {
-    return axios.get<Movie[]>("/api/movies/filter", { params: filters });
+    return axios.get<Movie[]>(import.meta.env.VITE_BACKEND_API + "/api/movies/filter", { params: filters });
 };
 
 export const getRandomMovie = () => {
-    return axios.get<Movie>("/api/movies/random");
+    return axios.get<Movie>(import.meta.env.VITE_BACKEND_API + "/api/movies/random");
 };

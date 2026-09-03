@@ -5,7 +5,7 @@ type FilterBarProps = {
     onFilterChange: (filters: MovieFilters) => void;
 };
 
-function FilterBar(props: FilterBarProps) {
+function FilterBar(props: Readonly<FilterBarProps>) {
     const [name, setName] = useState("");
     const [mediaType, setMediaType] = useState<"movie" | "tv" | "">("");
     const [year, setYear] = useState("");
