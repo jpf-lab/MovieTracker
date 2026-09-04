@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MovieProvider {
     List<MovieDTO> search(String name, String mediaType, Integer year);
+    MovieDTO getRandom();
 }

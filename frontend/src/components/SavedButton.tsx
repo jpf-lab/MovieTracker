@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiHeart } from "react-icons/fi";
-import { saveItem, deleteSavedItem } from "../api/savedItems";
+import { saveItem, deleteSavedItem, isItemSaved } from "../api/savedItems";
 import type { SavedItem } from "../types/SavedItem";
 
 type SavedButtonProps = {
@@ -10,6 +10,12 @@ type SavedButtonProps = {
 function SavedButton(props: Readonly<SavedButtonProps>) {
     const [isSaved, setIsSaved] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        isItemSaved(props.item.externalId, props.item.mediaType)
+            .then((response) => setIsSaved(response.data))
+            .catch(() => setIsSaved(false));
+    }, [props.item.externalId, props.item.mediaType]);
 
     function handleClick() {
         setIsLoading(true);

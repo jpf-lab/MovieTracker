@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFilteredMovies, type MovieFilters } from "../api/movies";
+import { getFilteredMovies, getRandomMovie, type MovieFilters } from "../api/movies";
 import type { Movie } from "../types/Movie";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
@@ -8,6 +8,7 @@ function Home() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isRandomLoading, setIsRandomLoading] = useState(false);
 
     function loadMovies(filters: MovieFilters) {
         setIsLoading(true);
@@ -24,6 +25,21 @@ function Home() {
             });
     }
 
+    function loadRandomMovie() {
+        setIsRandomLoading(true);
+        getRandomMovie()
+            .then((response) => {
+                setMovies([response.data]);
+                setError(null);
+            })
+            .catch(() => {
+                setError("Zufälliger Titel konnte nicht geladen werden.");
+            })
+            .finally(() => {
+                setIsRandomLoading(false);
+            });
+    }
+
     useEffect(() => {
         loadMovies({});
     }, []);
@@ -34,6 +50,17 @@ function Home() {
                 <h1 className="text-slate-100 text-xl font-medium mb-4">MovieTracker</h1>
 
                 <FilterBar onFilterChange={loadMovies} />
+
+                <div className="flex justify-center mb-6">
+                    <button
+                        type="button"
+                        onClick={loadRandomMovie}
+                        disabled={isRandomLoading}
+                        className="bg-cyan-400 text-slate-950 rounded-lg px-4 py-2 text-sm font-medium hover:bg-cyan-300 transition-colors disabled:opacity-50 animate-pulse"
+                    >
+                        {isRandomLoading ? "Lädt..." : "Überrasch mich"}
+                    </button>
+                </div>
 
                 {isLoading && <p className="text-slate-400">Lädt...</p>}
                 {error && <p className="text-rose-400">{error}</p>}
@@ -68,7 +95,6 @@ function Home() {
             </div>
         </div>
     );
-
 }
 
 export default Home;
