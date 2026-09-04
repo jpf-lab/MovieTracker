@@ -26,7 +26,7 @@ class TrackerControllerTest {
     @Autowired
     private MockRestServiceServer mockRestServiceServer;
 
-    public String tmdbMultiResponse = """
+    String tmdbMultiResponse = """
             {
                "page": 1,
                "results": [
@@ -80,7 +80,7 @@ class TrackerControllerTest {
             }
             """;
 
-    public String serviceMultiResponse = """
+    String serviceMultiResponse = """
             {
                 "page": 1,
                 "results": [
@@ -122,7 +122,7 @@ class TrackerControllerTest {
             }
             """;
 
-    public String tmdbConfigurationResponse = """
+    String tmdbConfigurationResponse = """
                     {
                       "images": {
                         "base_url": "http://image.tmdb.org/t/p/",
