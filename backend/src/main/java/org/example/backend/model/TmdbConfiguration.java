@@ -3,10 +3,12 @@ package org.example.backend.model;
 import lombok.Builder;
 import lombok.With;
 
+import java.util.List;
+
 @With
 @Builder
 public record TmdbConfiguration(
         TmdbConfigurationImage images,
-        String[] change_keys
+        List<String> change_keys
 ) {
 }
