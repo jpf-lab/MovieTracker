@@ -21,15 +21,18 @@ public class TrackerController {
         this.tmdbService = tmdbService;
     }
 
-    private String getPosterWidth(String[] posterSizes){
-        if(posterSizes.length>3){
-            return posterSizes[3];
-        }else{
-            return posterSizes[posterSizes.length-1];
+    private String getPosterWidth(List<String> posterSizes) {
+        String posterWidth = "original";
+        for (String posterSize : posterSizes) {
+            if (posterSize.startsWith("w3")) {
+                posterWidth = posterSize;
+                break;
+            }
         }
+        return posterWidth;
     }
 
-    private String getPosterPath(TmdbConfiguration configuration, String posterPath){
+    private String getPosterPath(TmdbConfiguration configuration, String posterPath) {
         return configuration.images().secure_base_url()
                 + getPosterWidth(configuration.images().poster_sizes())
                 + posterPath;
