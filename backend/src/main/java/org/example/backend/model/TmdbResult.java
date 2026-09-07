@@ -12,14 +12,15 @@ public record TmdbResult(
         String media_type,
         String poster_path,
         String overview,
-        String release_date,
 
         //TV exclusive
         String name,
         String original_name,
+        String first_air_date,
         //Movie exclusive
         String title,
         String original_title,
+        String release_date,
 
         List<Integer> genre_ids
 ) {

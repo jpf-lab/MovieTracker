@@ -5,11 +5,12 @@ import lombok.With;
 
 @With
 @Builder
-public record MovieDTO(
+public record ItemDTO(
         String externalId,
         String mediaType,
         String title,
         String posterPath,
         Integer year
-) {}
+) {
+}
 

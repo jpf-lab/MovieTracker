@@ -1,10 +1,14 @@
 package org.example.backend.service;
 
+import org.example.backend.dto.ItemDTO;
 import org.example.backend.model.TmdbConfiguration;
+import org.example.backend.model.TmdbResult;
 import org.example.backend.model.TmdbResults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 @Service
 public class TmdbService {
@@ -30,8 +34,32 @@ public class TmdbService {
                 .build();
     }
 
-    public TmdbResults findByQuery(String query, Integer page) {
-        return restClient.get()
+
+    private String getPosterWidth(List<String> posterSizes) {
+        String posterWidth = "original";
+        for (String posterSize : posterSizes) {
+            if (posterSize.startsWith("w3")) {
+                posterWidth = posterSize;
+                break;
+            }
+        }
+        return posterWidth;
+    }
+
+    private String getPosterPath(TmdbConfiguration configuration, String posterPath) {
+        return configuration.images().secure_base_url()
+                + getPosterWidth(configuration.images().poster_sizes())
+                + posterPath;
+    }
+
+    private Integer getYear(TmdbResult result) {
+        String itemDate = result.media_type().equals("tv") ? result.first_air_date() : result.release_date();
+
+        return (itemDate != null && !itemDate.isBlank()) ? Integer.parseInt(itemDate.substring(0, 4)) : null;
+    }
+
+    public List<ItemDTO> findByQuery(String query, Integer page, TmdbConfiguration configuration) {
+        TmdbResults results = restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search/multi")
                         .queryParam("query", query)
@@ -42,6 +70,22 @@ public class TmdbService {
                 .header("Authorization", "Bearer " + tmdbSettingsToken)
                 .retrieve()
                 .body(TmdbResults.class);
+
+        return results != null && !results.results().isEmpty() ?
+                results.results().stream()
+                        .map(result -> {
+
+
+                            return new ItemDTO(
+                                    result.id().toString(),
+                                    result.media_type(),
+                                    result.media_type().equals("tv") ? result.name() : result.title(),
+                                    getPosterPath(configuration, result.poster_path()),
+                                    getYear(result)
+                            );
+                        })
+                        .toList()
+                : null;
     }
 
     public TmdbConfiguration getConfiguration() {
