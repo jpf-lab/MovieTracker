@@ -4,8 +4,6 @@ import type {Movie} from "../types/Movie";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
 
-const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342";
-
 function Home() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +77,7 @@ function Home() {
                                 className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                             >
                                 <img
-                                    src={`${TMDB_IMAGE_BASE_URL}${movie.posterPath}`}
+                                    src={movie.posterPath}
                                     alt={movie.title}
                                     className="w-full h-auto"
                                 />

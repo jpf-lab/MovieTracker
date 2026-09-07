@@ -2,8 +2,6 @@ import {useEffect, useState} from "react";
 import {getSavedItems} from "../api/savedItems";
 import type {SavedItem} from "../types/SavedItem";
 
-const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342";
-
 function SavedItems() {
     const [items, setItems] = useState<SavedItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +43,7 @@ function SavedItems() {
                         className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                     >
                         <img
-                            src={`${TMDB_IMAGE_BASE_URL}${item.posterPath}`}
+                            src={item.posterPath}
                             alt={`Poster ${item.title}`}
                             className="w-full h-auto"
                         />
