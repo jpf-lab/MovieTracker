@@ -50,14 +50,15 @@ public class TrackerController {
                         r.media_type(),
                         getPosterPath(configuration, r.poster_path()),
                         r.overview(),
-                        r.release_date(),
 
                         //TV exclusive
                         r.name(),
                         r.original_name(),
+                        r.first_air_date(),
                         //Movie exclusive
                         r.title(),
                         r.original_title(),
+                        r.release_date(),
 
                         r.genre_ids()
                 ))

@@ -169,6 +169,127 @@ class TmdbMovieProviderTest {
     }
 
     @Test
+    void search_tv() throws Exception {
+        //GIVEN
+        String tmdbSearchTvResult = """
+                    {
+                       "page": 1,
+                       "results": [
+                         {
+                           "adult": false,
+                           "backdrop_path": "/m2QTmJhe36uKrkQjC1MsNV7Dcqp.jpg",
+                           "genre_ids": [
+                             16,
+                             10765,
+                             10759
+                           ],
+                           "id": 114478,
+                           "origin_country": [
+                             "JP",
+                             "US"
+                           ],
+                           "original_language": "en",
+                           "original_name": "Star Wars: Visions",
+                           "overview": "Diese Sammlung animierter Kurzfilme aus aller Welt feiert den Mythos von Star Wars aus einzigartigen kulturellen Blickwinkeln.",
+                           "popularity": 15.0735,
+                           "poster_path": "/tyEgE0plST1EuwLaLi9pwAQrLyw.jpg",
+                           "first_air_date": "2021-09-22",
+                           "softcore": false,
+                           "name": "Star Wars: Visionen",
+                           "vote_average": 7.091,
+                           "vote_count": 488
+                         }
+                      ],
+                      "total_pages": 500,
+                      "total_results": 10000
+                    }
+                """;
+
+        String serviceSearchTvResponse = """
+                    [
+                        {
+                          "externalId": "114478",
+                          "mediaType": "tv",
+                          "title": "Star Wars: Visionen",
+                          "posterPath": "/tyEgE0plST1EuwLaLi9pwAQrLyw.jpg",
+                          "year": 2021
+                        }
+                    ]
+                """;
+        //WHEN
+        mockRestServiceServer.expect(
+                        requestTo("https://api.themoviedb.org/3/search/tv?query=Star%20Wars&language=de-DE&year=2021")
+                )
+                .andRespond(withSuccess(tmdbSearchTvResult, MediaType.APPLICATION_JSON));
+        //WHEN
+        mockMvc.perform(
+                        get("/api/movies/filter?name=Star Wars&mediaType=tv&year=2021")
+                )
+                //THEN
+                .andExpect(status().isOk())
+                .andExpect(content().json(serviceSearchTvResponse));
+    }
+
+    @Test
+    void search_movie() throws Exception {
+        //GIVEN
+        String tmdbSearchMovieResult = """
+                    {
+                      "page": 1,
+                      "results": [
+                            {
+                              "adult": false,
+                              "backdrop_path": "/zqkmTXzjkAgXmEWLRsY4UpTWCeo.jpg",
+                              "genre_ids": [
+                                12,
+                                28,
+                                878
+                              ],
+                              "id": 11,
+                              "title": "Star Wars",
+                              "original_language": "en",
+                              "original_title": "Star Wars",
+                              "overview": "Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beautiful princess and restore peace and justice in the Empire.",
+                              "popularity": 34.9029,
+                              "poster_path": "/fai0rspsNeJCS69wHNjOdWxcI7P.jpg",
+                              "release_date": "1977-05-25",
+                              "softcore": false,
+                              "video": false,
+                              "vote_average": 8.208,
+                              "vote_count": 22810
+                            }
+                      ],
+                      "total_pages": 500,
+                      "total_results": 10000
+                    }
+                """;
+
+        String serviceSearchMovieResponse = """
+                    [
+                        {
+                          "externalId": "11",
+                          "mediaType": "movie",
+                          "title": "Star Wars",
+                          "posterPath": "/fai0rspsNeJCS69wHNjOdWxcI7P.jpg",
+                          "year": 1977
+                        }
+                    ]
+                """;
+        //WHEN
+        mockRestServiceServer.expect(
+                        requestTo("https://api.themoviedb.org/3/search/movie?query=Star%20Wars&language=de-DE&year=1977")
+                )
+                .andRespond(withSuccess(tmdbSearchMovieResult, MediaType.APPLICATION_JSON));
+        //WHEN
+        mockMvc.perform(
+                        get("/api/movies/filter?name=Star Wars&mediaType=movie&year=1977")
+                )
+                //THEN
+                .andExpect(status().isOk())
+                .andExpect(content().json(serviceSearchMovieResponse));
+    }
+
+    @Test
     void getRandom() throws Exception {
         //GIVEN
         String tmdbTrendingResult = """
