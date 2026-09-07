@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {getSavedItems} from "../api/savedItems";
 import type {SavedItem} from "../types/SavedItem";
 
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342";
+
 function SavedItems() {
     const [items, setItems] = useState<SavedItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,15 +38,15 @@ function SavedItems() {
     return (
         <div className="p-6 bg-slate-950 min-h-screen">
             <h1 className="text-slate-100 text-xl font-medium mb-4">Meine Liste</h1>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {items.map((item) => (
                     <div
                         key={item.id}
                         className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                     >
                         <img
-                            src="https://placehold.co/342x513?text=Poster"
-                            alt="Poster Platzhalter"
+                            src={`${TMDB_IMAGE_BASE_URL}${item.posterPath}`}
+                            alt={`Poster ${item.title}`}
                             className="w-full h-auto"
                         />
                         <div className="p-3">

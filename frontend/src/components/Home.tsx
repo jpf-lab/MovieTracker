@@ -4,6 +4,8 @@ import type {Movie} from "../types/Movie";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
 
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w342";
+
 function Home() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -70,15 +72,15 @@ function Home() {
                 )}
 
                 {!isLoading && !error && movies.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         {movies.map((movie) => (
                             <div
                                 key={movie.externalId}
                                 className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                             >
                                 <img
-                                    src="https://placehold.co/342x513?text=Poster"
-                                    alt="Poster Platzhalter"
+                                    src={`${TMDB_IMAGE_BASE_URL}${movie.posterPath}`}
+                                    alt={movie.title}
                                     className="w-full h-auto"
                                 />
                                 <div className="p-3 flex justify-between items-start gap-2">
