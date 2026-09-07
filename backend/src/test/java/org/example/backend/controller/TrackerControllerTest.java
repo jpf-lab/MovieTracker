@@ -1,13 +1,18 @@
 package org.example.backend.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.test.MockServerRestClientCustomizer;
 import org.springframework.boot.restclient.test.autoconfigure.AutoConfigureMockRestServiceServer;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestClient;
 
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -20,11 +25,36 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockRestServiceServer
 class TrackerControllerTest {
 
+    @TestConfiguration()
+    static class TestConfig {
+        private final MockServerRestClientCustomizer customizer = new MockServerRestClientCustomizer();
+        private final RestClient.Builder customizedBuilder = RestClient.builder();
+
+        public TestConfig() {
+            customizer.customize(customizedBuilder);
+        }
+
+        @Bean
+        public RestClient.Builder restClientBuilder() {
+            return customizedBuilder;
+        }
+
+        @Bean
+        public MockRestServiceServer mockRestServiceServer() {
+            return customizer.getServer(customizedBuilder);
+        }
+    }
+
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    private MockRestServiceServer mockRestServiceServer;
+    MockRestServiceServer mockRestServiceServer;
+
+    @BeforeEach
+    void setUp() {
+        mockRestServiceServer.reset();
+    }
 
     String tmdbMultiResponse = """
             {
