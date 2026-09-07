@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
 
@@ -10,9 +10,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class TmdbMovieProviderTest {
+class TmdbItemProviderTest {
 
-    private final TmdbMovieProvider provider = new TmdbMovieProvider(RestClient.builder());
+    private final TmdbItemProvider provider = new TmdbItemProvider(RestClient.builder());
 
     @Test
     void mapResultsToDto_shouldMapMovieCorrectly() {
@@ -32,7 +32,7 @@ class TmdbMovieProviderTest {
         // When: die Mapping-Methode wird mit "movie" als Fallback
         // aufgerufen (weil TMDB bei /search/movie kein eigenes
         // media_type-Feld mitschickt)
-        List<MovieDTO> result = provider.mapResultsToDto(response, "movie");
+        List<ItemDTO> result = provider.mapResultsToDto(response, "movie");
 
         // Then: alle Felder wurden korrekt uebernommen, das Jahr
         // wurde aus release_date extrahiert
@@ -61,7 +61,7 @@ class TmdbMovieProviderTest {
         );
 
         // When
-        List<MovieDTO> result = provider.mapResultsToDto(response, "tv");
+        List<ItemDTO> result = provider.mapResultsToDto(response, "tv");
 
         // Then
         assertEquals("Breaking Bad", result.get(0).title());
@@ -86,7 +86,7 @@ class TmdbMovieProviderTest {
         );
 
         // When
-        List<MovieDTO> result = provider.mapResultsToDto(response, "movie");
+        List<ItemDTO> result = provider.mapResultsToDto(response, "movie");
 
         // Then: kein Absturz, Jahr ist einfach null
         assertNull(result.get(0).year());
@@ -111,7 +111,7 @@ class TmdbMovieProviderTest {
 
         // When: fallbackMediaType wird absichtlich ignoriert, weil
         // die Antwort ihr eigenes media_type mitbringt
-        List<MovieDTO> result = provider.mapResultsToDto(response, null);
+        List<ItemDTO> result = provider.mapResultsToDto(response, null);
 
         // Then
         assertEquals("tv", result.get(0).mediaType());

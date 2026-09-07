@@ -1,8 +1,8 @@
-import { useState } from "react";
-import type { MovieFilters } from "../api/movies";
+import {useState} from "react";
+import type {ItemFilters} from "../api/items.ts";
 
 type FilterBarProps = {
-    onFilterChange: (filters: MovieFilters) => void;
+    onFilterChange: (filters: ItemFilters) => void;
 };
 
 function FilterBar(props: Readonly<FilterBarProps>) {
