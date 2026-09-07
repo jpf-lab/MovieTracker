@@ -1,7 +1,6 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.MovieDTO;
-import org.example.backend.model.TmdbResults;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
