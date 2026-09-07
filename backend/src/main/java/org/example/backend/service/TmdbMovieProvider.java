@@ -27,24 +27,6 @@ public class TmdbMovieProvider implements MovieProvider {
     }
 
     @Override
-    public List<MovieDTO> search(String name, String mediaType, Integer year) {
-        String endpoint = (mediaType != null && mediaType.equals("tv")) ? "/search/tv" : "/search/movie";
-
-        Map<String, Object> response = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(endpoint)
-                        .queryParam("query", name != null ? name : "")
-                        .queryParam("language", tmdbLanguage)
-                        .queryParamIfPresent("year", java.util.Optional.ofNullable(year))
-                        .build())
-                .header("Authorization", "Bearer " + tmdbToken)
-                .retrieve()
-                .body(Map.class);
-
-        return mapResultsToDto(response, mediaType != null ? mediaType : "movie");
-    }
-
-    @Override
     public MovieDTO getRandom() {
         Map<String, Object> response = restClient.get()
                 .uri(uriBuilder -> uriBuilder

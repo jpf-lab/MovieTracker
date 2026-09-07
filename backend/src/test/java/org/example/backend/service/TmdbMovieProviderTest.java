@@ -1,7 +1,19 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.MovieDTO;
+import org.example.backend.model.TmdbResults;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.test.MockServerRestClientCustomizer;
+import org.springframework.boot.restclient.test.autoconfigure.AutoConfigureMockRestServiceServer;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -9,10 +21,49 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
+@AutoConfigureMockRestServiceServer
 class TmdbMovieProviderTest {
 
+    @TestConfiguration()
+    static class TestConfig {
+        private final MockServerRestClientCustomizer customizer = new MockServerRestClientCustomizer();
+        private final RestClient.Builder customizedBuilder = RestClient.builder();
+
+        public TestConfig() {
+            customizer.customize(customizedBuilder);
+        }
+
+        @Bean
+        public RestClient.Builder restClientBuilder() {
+            return customizedBuilder;
+        }
+
+        @Bean
+        public MockRestServiceServer mockRestServiceServer() {
+            return customizer.getServer(customizedBuilder);
+        }
+    }
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    MockRestServiceServer mockRestServiceServer;
+
     private final TmdbMovieProvider provider = new TmdbMovieProvider(RestClient.builder());
+
+    @BeforeEach
+    void setUp() {
+        mockRestServiceServer.reset();
+    }
 
     @Test
     void mapResultsToDto_shouldMapMovieCorrectly() {
@@ -116,5 +167,65 @@ class TmdbMovieProviderTest {
         // Then
         assertEquals("tv", result.get(0).mediaType());
         assertEquals("Severance", result.get(0).title());
+    }
+
+    @Test
+    void getRandom() throws Exception {
+        //GIVEN
+        String tmdbTrendingResult = """
+                {
+                  "page": 1,
+                  "results": [
+                    {
+                      "adult": false,
+                      "backdrop_path": "/yG1wltFmkX5c5ocACKfpX0tp3SY.jpg",
+                      "id": 236235,
+                      "name": "The Gentlemen",
+                      "original_name": "The Gentlemen",
+                      "overview": "Als der adlige Eddie das Familienanwesen erbt, stelle er fest, dass ein riesiges Marihuana-Imperium dazugehört – und die Betreiber sich nicht in die Suppe spucken lassen.",
+                      "poster_path": "/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
+                      "media_type": "tv",
+                      "original_language": "en",
+                      "genre_ids": [
+                        35,
+                        18,
+                        80
+                      ],
+                      "popularity": 233.9356,
+                      "first_air_date": "2024-03-07",
+                      "softcore": false,
+                      "vote_average": 7.832,
+                      "vote_count": 879,
+                      "origin_country": [
+                        "GB"
+                      ]
+                    }
+                  ],
+                  "total_pages": 500,
+                  "total_results": 10000
+                }
+                """;
+
+
+        String serviceTrendingResponse = """
+                {
+                  "externalId": "236235",
+                  "mediaType": "tv",
+                  "title": "The Gentlemen",
+                  "posterPath": "/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
+                  "year": 2024
+                }
+                """;
+        mockRestServiceServer.expect(
+                        requestTo("https://api.themoviedb.org/3/trending/all/day?language=de-DE")
+                )
+                .andRespond(withSuccess(tmdbTrendingResult, MediaType.APPLICATION_JSON));
+        //WHEN
+        mockMvc.perform(
+                        get("/api/movies/random")
+                )
+                //THEN
+                .andExpect(status().isOk())
+                .andExpect(content().json(serviceTrendingResponse));
     }
 }
