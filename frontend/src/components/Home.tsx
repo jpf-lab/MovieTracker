@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { getFilteredMovies, getRandomMovie, type MovieFilters } from "../api/movies";
-import type { Movie } from "../types/Movie";
+import {useEffect, useState} from "react";
+import {getFilteredMovies, getRandomMovie, type MovieFilters} from "../api/movies";
+import type {Movie} from "../types/Movie";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
 
@@ -49,14 +49,14 @@ function Home() {
             <div className="max-w-5xl mx-auto p-6">
                 <h1 className="text-slate-100 text-xl font-medium mb-4">MovieTracker</h1>
 
-                <FilterBar onFilterChange={loadMovies} />
+                <FilterBar onFilterChange={loadMovies}/>
 
                 <div className="flex justify-center mb-6">
                     <button
                         type="button"
                         onClick={loadRandomMovie}
                         disabled={isRandomLoading}
-                        className="bg-cyan-400 text-slate-950 rounded-lg px-4 py-2 text-sm font-medium hover:bg-cyan-300 transition-colors disabled:opacity-50 animate-pulse"
+                        className="w-32 text-center bg-cyan-400 text-slate-950 rounded-lg py-2 text-sm font-medium hover:bg-cyan-300 transition-colors disabled:opacity-50 animate-pulse"
                     >
                         {isRandomLoading ? "Lädt..." : "Überrasch mich"}
                     </button>
@@ -76,17 +76,19 @@ function Home() {
                                 key={movie.externalId}
                                 className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                             >
-                                <div className="h-40 bg-slate-800 flex items-center justify-center text-slate-500">
-                                    Poster
-                                </div>
+                                <img
+                                    src="https://placehold.co/342x513?text=Poster"
+                                    alt="Poster Platzhalter"
+                                    className="w-full h-auto"
+                                />
                                 <div className="p-3 flex justify-between items-start gap-2">
                                     <div>
-                                        <p className="text-slate-100 text-sm font-medium">{movie.title}</p>
-                                        <p className="text-slate-400 text-xs">
+                                        <p className="text-slate-100 text-sm font-medium text-left">{movie.title}</p>
+                                        <p className="text-slate-400 text-xs text-left">
                                             {movie.year} · {movie.mediaType === "movie" ? "Film" : "Serie"}
                                         </p>
                                     </div>
-                                    <SavedButton item={movie} />
+                                    <SavedButton item={movie}/>
                                 </div>
                             </div>
                         ))}

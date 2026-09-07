@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { getSavedItems } from "../api/savedItems";
-import type { SavedItem } from "../types/SavedItem";
+import {useEffect, useState} from "react";
+import {getSavedItems} from "../api/savedItems";
+import type {SavedItem} from "../types/SavedItem";
 
 function SavedItems() {
     const [items, setItems] = useState<SavedItem[]>([]);
@@ -42,12 +42,14 @@ function SavedItems() {
                         key={item.id}
                         className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                     >
-                        <div className="h-40 bg-slate-800 flex items-center justify-center text-slate-500">
-                            Poster
-                        </div>
+                        <img
+                            src="https://placehold.co/342x513?text=Poster"
+                            alt="Poster Platzhalter"
+                            className="w-full h-auto"
+                        />
                         <div className="p-3">
-                            <p className="text-slate-100 text-sm font-medium">{item.title}</p>
-                            <p className="text-slate-400 text-xs">
+                            <p className="text-slate-100 text-sm font-medium text-left">{item.title}</p>
+                            <p className="text-slate-400 text-xs text-left">
                                 {item.mediaType === "movie" ? "Film" : "Serie"}
                             </p>
                         </div>
