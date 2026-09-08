@@ -1,6 +1,6 @@
 package org.example.backend.controller;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.example.backend.service.FilterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,13 @@ class FilterControllerTest {
     void filter_shouldReturnMatchingMovies() throws Exception {
         // Given: der (gemockte) Service liefert ein Ergebnis fuer
         // genau diese drei Filterparameter
-        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        ItemDTO movie = new ItemDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
         when(filterService.filter("Fight", "movie", 1999)).thenReturn(List.of(movie));
 
         // When: ein GET-Request mit allen drei Query-Parametern
         // wird simuliert
         // Then: die Antwort enthaelt den erwarteten Titel
-        mockMvc.perform(get("/api/movies/filter")
+        mockMvc.perform(get("/api/filter")
                         .param("name", "Fight")
                         .param("mediaType", "movie")
                         .param("year", "1999"))
@@ -46,13 +46,13 @@ class FilterControllerTest {
     void filter_shouldWorkWithoutAnyParameters() throws Exception {
         // Given: der Service liefert etwas zurueck, auch wenn
         // alle Parameter fehlen (sie sind ja optional)
-        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        ItemDTO movie = new ItemDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
         when(filterService.filter(null, null, null)).thenReturn(List.of(movie));
 
         // When: ein GET-Request ganz ohne Query-Parameter
         // Then: trotzdem Status 200, kein Fehler wegen fehlender
         // Parameter (bestaetigt "required = false" im Controller)
-        mockMvc.perform(get("/api/movies/filter"))
+        mockMvc.perform(get("/api/filter"))
                 .andExpect(status().isOk());
     }
 }

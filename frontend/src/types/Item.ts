@@ -1,4 +1,4 @@
-export interface Movie {
+export interface Item {
     externalId: string;
     mediaType: "movie" | "tv";
     title: string;
