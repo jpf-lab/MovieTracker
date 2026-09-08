@@ -1,6 +1,6 @@
 package org.example.backend.controller;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.example.backend.service.RandomService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ class RandomControllerTest {
     @Test
     void getRandom_shouldReturnMovie() throws Exception {
         // Given: der (gemockte) Service liefert einen festen Film
-        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        ItemDTO movie = new ItemDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
         when(randomService.getRandom()).thenReturn(movie);
 
         // When: ein GET-Request an /api/movies/random wird simuliert
         // Then: die Antwort enthaelt den erwarteten Titel
-        mockMvc.perform(get("/api/movies/random"))
+        mockMvc.perform(get("/api/random"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Fight Club"));
     }
