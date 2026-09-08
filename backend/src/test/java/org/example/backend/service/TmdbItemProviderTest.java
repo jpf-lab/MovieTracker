@@ -223,7 +223,7 @@ class TmdbItemProviderTest {
                 .andRespond(withSuccess(tmdbSearchTvResult, MediaType.APPLICATION_JSON));
         //WHEN
         mockMvc.perform(
-                        get("/api/movies/filter?name=Star Wars&mediaType=tv&year=2021")
+                        get("/api/filter?name=Star Wars&mediaType=tv&year=2021")
                 )
                 //THEN
                 .andExpect(status().isOk())
@@ -282,7 +282,7 @@ class TmdbItemProviderTest {
                 .andRespond(withSuccess(tmdbSearchMovieResult, MediaType.APPLICATION_JSON));
         //WHEN
         mockMvc.perform(
-                        get("/api/movies/filter?name=Star Wars&mediaType=movie&year=1977")
+                        get("/api/filter?name=Star Wars&mediaType=movie&year=1977")
                 )
                 //THEN
                 .andExpect(status().isOk())
@@ -342,7 +342,7 @@ class TmdbItemProviderTest {
                 .andRespond(withSuccess(tmdbTrendingResult, MediaType.APPLICATION_JSON));
         //WHEN
         mockMvc.perform(
-                        get("/api/movies/random")
+                        get("/api/random")
                 )
                 //THEN
                 .andExpect(status().isOk())
