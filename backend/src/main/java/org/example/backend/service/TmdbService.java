@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,17 +75,14 @@ public class TmdbService {
     public List<ItemDTO> generateItemDtoList(TmdbResults results, TmdbConfiguration configuration) {
         return results != null && !results.results().isEmpty() ?
                 results.results().stream()
-                        .map(result -> {
-
-
-                            return new ItemDTO(
-                                    result.id().toString(),
-                                    result.media_type(),
-                                    result.media_type().equals("tv") ? result.name() : result.title(),
-                                    getPosterPath(configuration, result.poster_path()),
-                                    getYear(result)
-                            );
-                        })
+                        .map(result -> new ItemDTO(
+                                        result.id().toString(),
+                                        result.media_type(),
+                                        result.media_type().equals("tv") ? result.name() : result.title(),
+                                        getPosterPath(configuration, result.poster_path()),
+                                        getYear(result)
+                                )
+                        )
                         .toList()
                 : null;
     }
