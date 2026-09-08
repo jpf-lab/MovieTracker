@@ -1,16 +1,16 @@
 import {useEffect, useState} from "react";
-import {getFilteredMovies, getRandomMovie, type MovieFilters} from "../api/movies";
-import type {Movie} from "../types/Movie";
+import {getFilteredMovies, getRandomMovie, type ItemFilters} from "../api/items.ts";
+import type {Item} from "../types/Item.ts";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
 
 function Home() {
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<Item[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isRandomLoading, setIsRandomLoading] = useState(false);
 
-    function loadMovies(filters: MovieFilters) {
+    function loadMovies(filters: ItemFilters) {
         setIsLoading(true);
         getFilteredMovies(filters)
             .then((response) => {
@@ -41,7 +41,7 @@ function Home() {
     }
 
     useEffect(() => {
-        loadMovies({});
+        //loadMovies({});
     }, []);
 
     return (

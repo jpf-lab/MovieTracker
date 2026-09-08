@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 class FilterServiceTest {
 
     @Mock
-    private MovieProvider movieProvider;
+    private ItemProvider itemProvider;
 
     private FilterService filterService;
 
@@ -23,18 +23,18 @@ class FilterServiceTest {
     void setUp() {
         // Given: der Mock wird vor jedem Test frisch initialisiert
         MockitoAnnotations.openMocks(this);
-        filterService = new FilterService(movieProvider);
+        filterService = new FilterService(itemProvider);
     }
 
     @Test
     void filter_shouldReturnResultsFromProvider() {
         // Given: der (gemockte) Provider liefert eine feste Liste
         // zurueck, wenn genau diese Filterparameter reinkommen
-        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
-        when(movieProvider.search("Fight", "movie", 1999)).thenReturn(List.of(movie));
+        ItemDTO movie = new ItemDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        when(itemProvider.search("Fight", "movie", 1999)).thenReturn(List.of(movie));
 
         // When: der Service wird mit denselben Parametern aufgerufen
-        List<MovieDTO> result = filterService.filter("Fight", "movie", 1999);
+        List<ItemDTO> result = filterService.filter("Fight", "movie", 1999);
 
         // Then: das Ergebnis entspricht genau dem, was der Provider
         // zurueckgegeben hat - der Service reicht nur durch
@@ -54,6 +54,6 @@ class FilterServiceTest {
         // aufgerufen - bestaetigt, dass der Service nur delegiert
         // (SRP: FilterService hat keine eigene Filterlogik, das
         // macht der Provider)
-        verify(movieProvider).search("Dark", "tv", 2017);
+        verify(itemProvider).search("Dark", "tv", 2017);
     }
 }

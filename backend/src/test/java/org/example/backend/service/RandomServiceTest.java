@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 class RandomServiceTest {
 
     @Mock
-    private MovieProvider movieProvider;
+    private ItemProvider itemProvider;
 
     private RandomService randomService;
 
@@ -20,17 +20,17 @@ class RandomServiceTest {
     void setUp() {
         // Given: der Mock wird vor jedem Test frisch initialisiert
         MockitoAnnotations.openMocks(this);
-        randomService = new RandomService(movieProvider);
+        randomService = new RandomService(itemProvider);
     }
 
     @Test
     void getRandom_shouldReturnMovieFromProvider() {
         // Given: der (gemockte) Provider liefert einen festen Film
-        MovieDTO movie = new MovieDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
-        when(movieProvider.getRandom()).thenReturn(movie);
+        ItemDTO movie = new ItemDTO("550", "movie", "Fight Club", "/poster1.jpg", 1999);
+        when(itemProvider.getRandom()).thenReturn(movie);
 
         // When: der Service wird aufgerufen
-        MovieDTO result = randomService.getRandom();
+        ItemDTO result = randomService.getRandom();
 
         // Then: das Ergebnis entspricht genau dem, was der Provider
         // geliefert hat - der Service reicht nur durch

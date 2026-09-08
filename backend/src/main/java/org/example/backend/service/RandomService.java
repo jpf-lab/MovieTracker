@@ -1,16 +1,16 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RandomService {
 
-    private final MovieProvider movieProvider;
+    private final ItemProvider itemProvider;
 
-    public MovieDTO getRandom() {
-        return movieProvider.getRandom();
+    public ItemDTO getRandom() {
+        return itemProvider.getRandom();
     }
 }

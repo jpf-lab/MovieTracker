@@ -1,11 +1,11 @@
 import {useState} from "react";
-import type {MovieFilters} from "../api/movies";
+import type {ItemFilters} from "../api/items.ts";
 
 type FilterBarProps = {
-    onFilterChange: (filters: MovieFilters) => void;
+    onFilterChange: (filters: ItemFilters) => void;
 };
 
-function FilterBar(props: FilterBarProps) {
+function FilterBar(props: Readonly<FilterBarProps>) {
     const [name, setName] = useState("");
     const [mediaType, setMediaType] = useState<"movie" | "tv" | "">("");
     const [year, setYear] = useState("");

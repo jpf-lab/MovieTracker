@@ -1,6 +1,6 @@
 package org.example.backend.service;
 
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
-public class TmdbMovieProvider implements MovieProvider {
+public class TmdbItemProvider implements ItemProvider {
 
     private final RestClient restClient;
 
@@ -20,14 +20,14 @@ public class TmdbMovieProvider implements MovieProvider {
     @Value("${tmdb.settings.language}")
     private String tmdbLanguage;
 
-    public TmdbMovieProvider(RestClient.Builder restClientBuilder) {
+    public TmdbItemProvider(RestClient.Builder restClientBuilder) {
         this.restClient = restClientBuilder
                 .baseUrl("https://api.themoviedb.org/3")
                 .build();
     }
 
     @Override
-    public List<MovieDTO> search(String name, String mediaType, Integer year) {
+    public List<ItemDTO> search(String name, String mediaType, Integer year) {
         String endpoint = (mediaType != null && mediaType.equals("tv")) ? "/search/tv" : "/search/movie";
 
         Map<String, Object> response = restClient.get()
@@ -45,7 +45,7 @@ public class TmdbMovieProvider implements MovieProvider {
     }
 
     @Override
-    public MovieDTO getRandom() {
+    public ItemDTO getRandom() {
         Map<String, Object> response = restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/trending/all/day")
@@ -55,13 +55,13 @@ public class TmdbMovieProvider implements MovieProvider {
                 .retrieve()
                 .body(Map.class);
 
-        List<MovieDTO> movies = mapResultsToDto(response, null);
+        List<ItemDTO> movies = mapResultsToDto(response, null);
         int index = ThreadLocalRandom.current().nextInt(movies.size());
         return movies.get(index);
     }
 
     @SuppressWarnings("unchecked")
-    List<MovieDTO> mapResultsToDto(Map<String, Object> response, String fallbackMediaType) {
+    List<ItemDTO> mapResultsToDto(Map<String, Object> response, String fallbackMediaType) {
         List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
 
         return results.stream()
@@ -72,7 +72,7 @@ public class TmdbMovieProvider implements MovieProvider {
                     String date = (String) r.get(dateField);
                     Integer year = (date != null && !date.isBlank()) ? Integer.parseInt(date.substring(0, 4)) : null;
 
-                    return new MovieDTO(
+                    return new ItemDTO(
                             String.valueOf(r.get("id")),
                             type,
                             title,
