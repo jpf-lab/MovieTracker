@@ -58,8 +58,8 @@ public class TmdbService {
         return (itemDate != null && !itemDate.isBlank()) ? Integer.parseInt(itemDate.substring(0, 4)) : null;
     }
 
-    public List<ItemDTO> findByQuery(String query, Integer page, TmdbConfiguration configuration) {
-        TmdbResults results = restClient.get()
+    public TmdbResults findByQuery(String query, Integer page) {
+        return restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search/multi")
                         .queryParam("query", query)
@@ -70,20 +70,19 @@ public class TmdbService {
                 .header("Authorization", "Bearer " + tmdbSettingsToken)
                 .retrieve()
                 .body(TmdbResults.class);
+    }
 
+    public List<ItemDTO> generateItemDtoList(TmdbResults results, TmdbConfiguration configuration) {
         return results != null && !results.results().isEmpty() ?
                 results.results().stream()
-                        .map(result -> {
-
-
-                            return new ItemDTO(
-                                    result.id().toString(),
-                                    result.media_type(),
-                                    result.media_type().equals("tv") ? result.name() : result.title(),
-                                    getPosterPath(configuration, result.poster_path()),
-                                    getYear(result)
-                            );
-                        })
+                        .map(result -> new ItemDTO(
+                                        result.id().toString(),
+                                        result.media_type(),
+                                        result.media_type().equals("tv") ? result.name() : result.title(),
+                                        getPosterPath(configuration, result.poster_path()),
+                                        getYear(result)
+                                )
+                        )
                         .toList()
                 : null;
     }
