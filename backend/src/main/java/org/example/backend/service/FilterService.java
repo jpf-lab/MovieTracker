@@ -1,7 +1,7 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.dto.MovieDTO;
+import org.example.backend.dto.ItemDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilterService {
 
-    private final MovieProvider movieProvider;
+    private final ItemProvider itemProvider;
 
-    public List<MovieDTO> filter(String name, String mediaType, Integer year) {
-        return movieProvider.search(name, mediaType, year);
+    public List<ItemDTO> filter(String name, String mediaType, Integer year) {
+        return itemProvider.search(name, mediaType, year);
     }
 }

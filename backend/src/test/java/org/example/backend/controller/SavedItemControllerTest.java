@@ -32,14 +32,14 @@ class SavedItemControllerTest {
         // Given: der Request-Body ist ein DTO-foermiges JSON (ohne id),
         // der (gemockte) Service liefert die vollstaendige Entity
         // (mit generierter id) zurueck
-        SavedItem savedEntity = new SavedItem("1", "123", "movie", "Test Movie", "/poster.jpg");
+        SavedItem savedEntity = new SavedItem("1", "123", "movie", "Test Item", "/poster.jpg");
         when(savedItemService.save(any(SavedItemDTO.class))).thenReturn(savedEntity);
 
         String requestBody = """
                 {
                   "externalId": "123",
                   "mediaType": "movie",
-                  "title": "Test Movie",
+                  "title": "Test Item",
                   "posterPath": "/poster.jpg"
                 }
                 """;
@@ -51,20 +51,20 @@ class SavedItemControllerTest {
                         .content(requestBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.title").value("Test Movie"));
+                .andExpect(jsonPath("$.title").value("Test Item"));
     }
 
     @Test
     void findAll_shouldReturnList() throws Exception {
         // Given: der Service liefert eine Liste mit einem Item
-        SavedItem item = new SavedItem("1", "123", "movie", "Test Movie", "/poster.jpg");
+        SavedItem item = new SavedItem("1", "123", "movie", "Test Item", "/poster.jpg");
         when(savedItemService.findAll()).thenReturn(List.of(item));
 
         // When: ein GET-Request wird simuliert
         // Then: die Antwort enthaelt das Item
         mockMvc.perform(get("/api/saved"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Test Movie"));
+                .andExpect(jsonPath("$[0].title").value("Test Item"));
     }
 
     @Test
