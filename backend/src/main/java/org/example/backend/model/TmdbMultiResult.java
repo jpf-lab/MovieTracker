@@ -7,7 +7,7 @@ import java.util.List;
 
 @With
 @Builder
-public record TmdbResult(
+public record TmdbMultiResult(
         Integer id,
         String media_type,
         String poster_path,

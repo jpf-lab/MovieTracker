@@ -1,9 +1,7 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.ItemDTO;
-import org.example.backend.model.TmdbConfiguration;
-import org.example.backend.model.TmdbResult;
-import org.example.backend.model.TmdbResults;
+import org.example.backend.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -52,13 +50,13 @@ public class TmdbService {
                 + posterPath;
     }
 
-    private Integer getYear(TmdbResult result) {
-        String itemDate = result.media_type().equals("tv") ? result.first_air_date() : result.release_date();
+    private Integer getYear(String itemDate) {
+//        String itemDate = result.media_type().equals("tv") ? result.first_air_date() : result.release_date();
 
         return (itemDate != null && !itemDate.isBlank()) ? Integer.parseInt(itemDate.substring(0, 4)) : null;
     }
 
-    public TmdbResults findByQuery(String query, Integer page) {
+    public TmdbMultiResults findByQuery(String query, Integer page) {
         return restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search/multi")
@@ -69,10 +67,40 @@ public class TmdbService {
                         .build())
                 .header("Authorization", "Bearer " + tmdbSettingsToken)
                 .retrieve()
-                .body(TmdbResults.class);
+                .body(TmdbMultiResults.class);
     }
 
-    public List<ItemDTO> generateItemDtoList(TmdbResults results, TmdbConfiguration configuration) {
+    public TmdbMovieResults findMovie(String query, Integer page, String year) {
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search/movie")
+                        .queryParam("query", query)
+                        .queryParam("include_adult", tmdbSettingsIncludeAdults)
+                        .queryParam("language", tmdbSettingsLanguage)
+                        .queryParam("page", page)
+                        .queryParam("primary_release_year", year)
+                        .build())
+                .header("Authorization", "Bearer " + tmdbSettingsToken)
+                .retrieve()
+                .body(TmdbMovieResults.class);
+    }
+
+    public TmdbTVResults findTV(String query, Integer page, String year) {
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/search/tv")
+                        .queryParam("query", query)
+                        .queryParam("include_adult", tmdbSettingsIncludeAdults)
+                        .queryParam("language", tmdbSettingsLanguage)
+                        .queryParam("page", page)
+                        .queryParam("first_air_date_year", year)
+                        .build())
+                .header("Authorization", "Bearer " + tmdbSettingsToken)
+                .retrieve()
+                .body(TmdbTVResults.class);
+    }
+
+    public List<ItemDTO> generateItemDtoList(TmdbMultiResults results, TmdbConfiguration configuration) {
         return results != null && !results.results().isEmpty() ?
                 results.results().stream()
                         .map(result -> new ItemDTO(
@@ -80,7 +108,7 @@ public class TmdbService {
                                         result.media_type(),
                                         result.media_type().equals("tv") ? result.name() : result.title(),
                                         getPosterPath(configuration, result.poster_path()),
-                                        getYear(result)
+                                        getYear(result.media_type().equals("tv") ? result.first_air_date() : result.release_date())
                                 )
                         )
                         .toList()

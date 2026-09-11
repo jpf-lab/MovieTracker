@@ -7,9 +7,9 @@ import java.util.List;
 
 @With
 @Builder
-public record TmdbResults(
+public record TmdbTVResults(
         Integer page,
-        List<TmdbResult> results,
+        List<TmdbTVResult> results,
         Integer total_pages,
         Integer total_results
 ) {

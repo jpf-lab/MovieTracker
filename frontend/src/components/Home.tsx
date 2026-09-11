@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getFilteredMovies, getRandomMovie, type ItemFilters} from "../api/items.ts";
+import {getFilteredItems, getRandomMovie, type ItemFilters} from "../api/items.ts";
 import type {Item} from "../types/Item.ts";
 import FilterBar from "./FilterBar";
 import SavedButton from "./SavedButton";
@@ -10,19 +10,24 @@ function Home() {
     const [error, setError] = useState<string | null>(null);
     const [isRandomLoading, setIsRandomLoading] = useState(false);
 
-    function loadMovies(filters: ItemFilters) {
+    function loadItems(filters: ItemFilters) {
         setIsLoading(true);
-        getFilteredMovies(filters)
-            .then((response) => {
-                setMovies(response.data);
-                setError(null);
-            })
-            .catch(() => {
-                setError("Filme konnten nicht geladen werden. Läuft das Backend?");
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        if (filters) {
+            getFilteredItems(filters)
+                .then((response) => {
+                    setMovies(response.data);
+                    setError(null);
+                })
+                .catch(() => {
+                    setError("Filme konnten nicht geladen werden. Läuft das Backend?");
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        } else {
+            setError("Bitte Filter verwenden")
+            setIsLoading(false);
+        }
     }
 
     function loadRandomMovie() {
@@ -49,7 +54,7 @@ function Home() {
             <div className="max-w-5xl mx-auto p-6">
                 <h1 className="text-slate-100 text-xl font-medium mb-4">MovieTracker</h1>
 
-                <FilterBar onFilterChange={loadMovies}/>
+                <FilterBar onFilterChange={loadItems}/>
 
                 <div className="flex justify-center mb-6">
                     <button
