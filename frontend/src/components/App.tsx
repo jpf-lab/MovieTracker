@@ -2,12 +2,32 @@ import {Routes, Route, NavLink} from 'react-router-dom'
 import Home from './Home'
 import SavedItems from './SavedItems'
 import '../css/App.css'
+import axios from "axios";
+import {useEffect} from "react";
+
+// import OAuth from "./OAuth.tsx";
 
 function App() {
     const linkClass = (isActive: boolean) =>
         `px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
             isActive ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:text-slate-100"
         }`;
+
+
+    const loadUser = () => {
+        axios
+            .get('/api/auth/me')
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    useEffect(() => {
+        loadUser();
+    }, []);
 
     return (
         <>
@@ -20,6 +40,7 @@ function App() {
                     </nav>
                 </div>
             </div>
+            {/*<OAuth/>*/}
             <Routes>
                 <Route path="/" element={<SavedItems/>}/>
                 <Route path="/search" element={<Home/>}/>
