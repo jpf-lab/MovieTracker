@@ -111,45 +111,22 @@ class TrackerControllerTest {
             """;
 
     String serviceMultiResponse = """
-            {
-                "page": 1,
-                "results": [
+            [
                     {
-                        "id": 11,
-                        "media_type": "movie",
-                        "poster_path": "https://image.tmdb.org/t/p/w342/crUUE14AROxNWsMdmyyqZNcUB6L.jpg",
-                        "overview": "Seit der Vernichtung der Jedi-Ritter steht die Galaxie unter der grausamen Herrschaft des Imperiums. Nur eine kleine Gruppe von Rebellen, angeführt von der schönen Prinzessin Leia, widersetzt sich der dunklen Macht. Als es ihnen gelingt, die geheimen Baupläne für den gefährlichen Todesstern zu entwenden, gerät das Imperium in Aufruhr. Durch Zufall gelangen die Pläne ausgerechnet in die Hände des Farmerjungen Luke Skywalker, der spürt, dass er sein bisheriges Leben hinter sich lassen muss. Gemeinsam mit dem weisen Obi-Wan Kenobi, den Weltraumabenteurern Han Solo und Chewbacca sowie den Droiden R2-D2 und C-3PO nimmt er den Kampf gegen das mächtige Imperium auf. Es beginnt ein Wettlauf gegen die Zeit, denn der Kampfstern kann nur vor seiner Fertigstellung zerstört werden...",
-                        "release_date": "1977-05-25",
-                        "name": null,
-                        "original_name": null,
+                        "externalId": "11",
+                        "mediaType": "movie",
                         "title": "Krieg der Sterne",
-                        "original_title": "Star Wars",
-                        "genre_ids": [
-                            12,
-                            28,
-                            878
-                        ]
+                        "posterPath": "https://image.tmdb.org/t/p/w342/crUUE14AROxNWsMdmyyqZNcUB6L.jpg",
+                        "year": 1977
                     },
                     {
-                        "id": 114478,
-                        "media_type": "tv",
-                        "poster_path": "https://image.tmdb.org/t/p/w342/tyEgE0plST1EuwLaLi9pwAQrLyw.jpg",
-                        "overview": "Diese Sammlung animierter Kurzfilme aus aller Welt feiert den Mythos von Star Wars aus einzigartigen kulturellen Blickwinkeln.",
-                        "release_date": null,
-                        "name": "Star Wars: Visionen",
-                        "original_name": "Star Wars: Visions",
-                        "title": null,
-                        "original_title": null,
-                        "genre_ids": [
-                            16,
-                            10765,
-                            10759
-                        ]
+                        "externalId": "114478",
+                        "mediaType": "tv",
+                        "title": "Star Wars: Visionen",
+                        "posterPath": "https://image.tmdb.org/t/p/w342/tyEgE0plST1EuwLaLi9pwAQrLyw.jpg",
+                        "year": 2021
                     }
-                ],
-                "total_pages": 13,
-                "total_results": 245
-            }
+            ]
             """;
 
     String tmdbConfigurationResponse = """

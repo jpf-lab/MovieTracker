@@ -56,7 +56,7 @@ function Home() {
                         type="button"
                         onClick={loadRandomMovie}
                         disabled={isRandomLoading}
-                        className="bg-cyan-400 text-slate-950 rounded-lg px-4 py-2 text-sm font-medium hover:bg-cyan-300 transition-colors disabled:opacity-50 animate-pulse"
+                        className="w-32 text-center bg-cyan-400 text-slate-950 rounded-lg py-2 text-sm font-medium hover:bg-cyan-300 transition-colors disabled:opacity-50 animate-pulse"
                     >
                         {isRandomLoading ? "Lädt..." : "Überrasch mich"}
                     </button>
@@ -70,19 +70,21 @@ function Home() {
                 )}
 
                 {!isLoading && !error && movies.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         {movies.map((movie) => (
                             <div
                                 key={movie.externalId}
                                 className="bg-slate-900 ring-1 ring-slate-800 rounded-xl overflow-hidden"
                             >
-                                <div className="h-40 bg-slate-800 flex items-center justify-center text-slate-500">
-                                    Poster
-                                </div>
+                                <img
+                                    src={movie.posterPath}
+                                    alt={movie.title}
+                                    className="w-full h-auto"
+                                />
                                 <div className="p-3 flex justify-between items-start gap-2">
                                     <div>
-                                        <p className="text-slate-100 text-sm font-medium">{movie.title}</p>
-                                        <p className="text-slate-400 text-xs">
+                                        <p className="text-slate-100 text-sm font-medium text-left">{movie.title}</p>
+                                        <p className="text-slate-400 text-xs text-left">
                                             {movie.year} · {movie.mediaType === "movie" ? "Film" : "Serie"}
                                         </p>
                                     </div>
