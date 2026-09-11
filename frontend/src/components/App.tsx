@@ -15,9 +15,13 @@ function App() {
 
 
     const loadUser = () => {
-        axios.get('/api/auth/me')
+        axios
+            .get('/api/auth/me')
             .then(response => {
                 console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error)
             })
     }
 
@@ -38,8 +42,8 @@ function App() {
             </div>
             {/*<OAuth/>*/}
             <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/saved" element={<SavedItems/>}/>
+                <Route path="/" element={<SavedItems/>}/>
+                <Route path="/search" element={<Home/>}/>
             </Routes>
         </>
     )
